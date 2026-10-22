@@ -78,8 +78,11 @@ def main() -> int:
         print("Could not find the expected version and SHA-256 stanzas in the cask.", file=sys.stderr)
         return 1
 
-    cask_path.write_text(updated, encoding="utf-8")
-    print(f"Updated PandaCode cask to v{version}.")
+    if updated == contents:
+        print(f"PandaCode cask is already current at v{version}.")
+    else:
+        cask_path.write_text(updated, encoding="utf-8")
+        print(f"Updated PandaCode cask to v{version}.")
     return 0
 
 
