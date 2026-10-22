@@ -1,0 +1,41 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  cask:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@848c272c7bfe984a197bd4d16383f4c106ec61e6 # 2026.09.21.1
+        with:
+          core: false
+          cask: false
+
+      - name: Check tap syntax with test-bot
+        run: brew test-bot --only-tap-syntax --tap="$GITHUB_REPOSITORY"
+
+      - name: Check Ruby style
+        run: brew style --cask "$(brew --repository "$GITHUB_REPOSITORY_OWNER/pandacode")/Casks/pandacode.rb"
+
+      - name: Audit cask
+        run: brew audit --cask --strict "$GITHUB_REPOSITORY_OWNER/pandacode/pandacode"
+
+      - name: Install and smoke-test app bundle
+        run: |
+          appdir="${RUNNER_TEMP}/Applications"
+          brew install --cask --appdir="$appdir" "$GITHUB_REPOSITORY_OWNER/pandacode/pandacode"
+          info="$appdir/PandaCode.app/Contents/Info.plist"
+          test -f "$info"
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$info")" = "ai.pandacode.desktop"
+          installed_version=$(brew info --cask --json=v2 "$GITHUB_REPOSITORY_OWNER/pandacode/pandacode" | ruby -rjson -e 'puts JSON.parse(STDIN.read).fetch("casks").first.fetch("version")')
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$info")" = "$installed_version"
+          executable=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$info")
+          test -x "$appdir/PandaCode.app/Contents/MacOS/$executable"
