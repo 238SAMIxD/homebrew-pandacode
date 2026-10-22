@@ -30,7 +30,7 @@ jobs:
         run: python3 scripts/update-cask.py "$RELEASE_VERSION"
 
       - name: Check Ruby style
-        run: brew style Casks/pandacode.rb
+        run: brew style --cask Casks/pandacode.rb
 
       - name: Commit and push cask update
         env:

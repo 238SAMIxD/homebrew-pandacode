@@ -15,6 +15,8 @@ REPOSITORY = "aicodeking/pandacode"
 ASSETS = {
     "arm": "PandaCode-macOS-arm64.dmg",
     "intel": "PandaCode-macOS-x64.dmg",
+    "arm64_linux": "PandaCode-Linux-aarch64.AppImage",
+    "x86_64_linux": "PandaCode-Linux-x86_64.AppImage",
 }
 VERSION_PATTERN = re.compile(r"\A\d+\.\d+\.\d+\Z")
 CHECKSUM_PATTERN = re.compile(r"\A([0-9a-fA-F]{64})\s+\*?([^\s]+)\s*\Z")
@@ -67,13 +69,19 @@ def main() -> int:
         f'  version "{version}"',
         contents,
     )
-    updated, checksum_count = re.subn(
+    checksum_pattern = (
         r'(?m)^  sha256 arm:\s+"[0-9a-f]{64}",\n'
-        r'         intel: "[0-9a-f]{64}"$',
-        f'  sha256 arm:   "{checksums["arm"]}",\n'
-        f'         intel: "{checksums["intel"]}"',
-        updated,
+        r'         intel:\s+"[0-9a-f]{64}",\n'
+        r'         arm64_linux:\s+"[0-9a-f]{64}",\n'
+        r'         x86_64_linux:\s+"[0-9a-f]{64}"$'
     )
+    checksum_replacement = (
+        f'  sha256 arm:          "{checksums["arm"]}",\n'
+        f'         intel:        "{checksums["intel"]}",\n'
+        f'         arm64_linux:  "{checksums["arm64_linux"]}",\n'
+        f'         x86_64_linux: "{checksums["x86_64_linux"]}"'
+    )
+    updated, checksum_count = re.subn(checksum_pattern, checksum_replacement, updated)
     if version_count != 1 or checksum_count != 1:
         print("Could not find the expected version and SHA-256 stanzas in the cask.", file=sys.stderr)
         return 1
