@@ -1,5 +1,7 @@
 # homebrew-pandacode
 
+🍺 Official Homebrew tap for PandaCode
+
 A Homebrew Cask for [PandaCode](https://github.com/aicodeking/pandacode), a native desktop workspace for coding agents.
 
 ## Install
