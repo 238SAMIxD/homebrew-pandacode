@@ -5,6 +5,7 @@ on:
     types: [pandacode-release]
 
 permissions:
+  actions: write
   contents: write
 
 concurrency:
