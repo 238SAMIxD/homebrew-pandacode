@@ -17,7 +17,7 @@ Or install the cask in one command:
 brew install --cask aicodeking/pandacode/pandacode
 ```
 
-The cask selects the native Apple silicon or Intel DMG from the latest GitHub Release. Its version and SHA-256 values are pinned in the cask; each value comes from the matching `.sha256` release asset. PandaCode requires macOS 12 Monterey or later and updates itself after installation. The release is ad-hoc signed; if Gatekeeper blocks the first launch, choose **Open Anyway** in System Settings > Privacy & Security.
+The cask selects the native Apple silicon or Intel DMG for the version pinned in the cask; its version and SHA-256 values are automatically refreshed for each upstream release. Each checksum comes from the matching `.sha256` release asset. PandaCode requires macOS 12 Monterey or later and updates itself after installation. The release is ad-hoc signed; if Gatekeeper blocks the first launch, choose **Open Anyway** in System Settings > Privacy & Security.
 
 ## Linux AppImage
 
@@ -45,4 +45,4 @@ Homebrew Casks do not provide a license metadata field or a `test do` block. CI 
 
 ## Updating the cask
 
-The tap listens for a `pandacode-release` repository dispatch, fetches each macOS DMG's `.sha256` file, updates `version` and both architecture-specific checksums, and commits the cask update. The upstream release workflow should send this event after publishing a release. Configure a `HOMEBREW_TAP_TOKEN` Actions secret in `aicodeking/pandacode` using a token with `contents: write` access to this tap. The cask URL remains on GitHub's `releases/latest/download` endpoint.
+The tap listens for a `pandacode-release` repository dispatch, fetches each macOS DMG's `.sha256` file, updates `version` and both architecture-specific checksums, and commits the cask update. The upstream release workflow should send this event after publishing a release. Configure a `HOMEBREW_TAP_TOKEN` Actions secret in `aicodeking/pandacode` using a token with `contents: write` access to this tap. The cask uses versioned release URLs so Homebrew can verify each download against its pinned checksum; Linux AppImages remain available through `releases/latest/download`.

@@ -5,7 +5,7 @@ cask "pandacode" do
   sha256 arm:   "98eb41c5e2215e0901762e121c6ff57cbd67e534083b364fe0747b9aac86b270",
          intel: "3f5c86e7e633b1d74dc3477c49c7e41047908516cb38ec01a91d80ca3305ea88"
 
-  url "https://github.com/aicodeking/pandacode/releases/latest/download/PandaCode-macOS-#{arch}.dmg"
+  url "https://github.com/aicodeking/pandacode/releases/download/v#{version}/PandaCode-macOS-#{arch}.dmg"
   name "PandaCode"
   desc "Calm desktop workspace for coding agents"
   homepage "https://github.com/aicodeking/pandacode"
